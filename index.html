@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>360全景</title>
+  <style type="text/css">
+     *{
+       margin: 0;
+       padding: 0;
+     }
+     body{
+       overflow:hidden;
+     }
+    #car{
+      width: 100%;
+    }
+  </style> 
+  <script type="text/javascript">
+      window.onload = function () {
+        //图片预加载
+        var imgArr = [];
+        for (var i = 0; i < 60; i ++) {
+          var newImg = new Image();
+          newImg.src = "img/"+i+".jpg";
+          imgArr.push(newImg);
+        }
+        var carImg = document.getElementById('car');
+        //保存当前显示的图片
+        var currentImgIndex = 0;
+        document.onmousedown = function(event){
+          //处理兼容性问题
+          event = event || window.event;
+          //获取鼠标当前的坐标
+          var begin = event.clientX;
+          //创建一个变量，保存鼠标移动的距离
+          var dis = 0;
+          //为document绑定一个鼠标移动事件
+          document.onmousemove = function(event){
+            //处理兼容性问题
+            event = event || window.event;
+            var current = event.clientX;
+            //获取鼠标移动的距离
+            dis = currentImgIndex + Math.floor((begin - current)/35);
+            dis %= 60;
+            if(dis < 0){
+                dis += 60;
+            }
+            // 修改img标签中的图片
+            carImg.src = "img/"+dis+".jpg";
+          };
+          document.onmouseup = function () {
+            document.onmousemove = null;
+            document.onmouseup = null;
+            //更新图片索引
+            currentImgIndex = dis;
+          };
+          return false;
+        };
+      }
+  </script>
+</head>
+<body>
+<img id="car" src="img/0.jpg" alt="">
+
+</body>
+</html>
